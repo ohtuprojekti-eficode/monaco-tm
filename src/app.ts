@@ -22,7 +22,7 @@ interface DemoScopeNameInfo extends ScopeNameInfo {
   path: string;
 }
 
-main('python');
+main('robot');
 
 async function main(language: LanguageId) {
   // In this demo, the following values are hardcoded to support Python using
@@ -64,11 +64,20 @@ async function main(language: LanguageId) {
       filenames: ['Snakefile', 'BUILD', 'BUCK', 'TARGETS'],
       firstLine: '^#!\\s*/?.*\\bpython[0-9.-]*\\b',
     },
+    {
+      id: 'robot',
+      extensions: ['.robot'],
+    },
   ];
+
   const grammars: {[scopeName: string]: DemoScopeNameInfo} = {
     'source.python': {
       language: 'python',
       path: 'MagicPython.tmLanguage.json',
+    },
+    'source.robot': {
+      language: 'robot',
+      path: 'robotframework.tmLanguage.json',
     },
   };
 
@@ -153,6 +162,24 @@ async def bar(): string:
   f = await foo()
   f_string = f"Hooray {f}! format strings are not supported in current Monarch grammar"
   return foo_string
+`;
+  } else if (language === 'robot') {
+    return `\
+*** Settings ***
+Documentation     A test suite with a single test for valid login.
+...
+...               This test has a workflow that is created using keywords in
+...               the imported resource file.
+Resource          resource.txt
+
+*** Test Cases ***
+Valid Login
+    Open Browser To Login Page
+    Input Username    demo
+    Input Password    mode
+    Submit Credentials
+    Welcome Page Should Be Open
+    [Teardown]    Close Browser
 `;
   }
 
